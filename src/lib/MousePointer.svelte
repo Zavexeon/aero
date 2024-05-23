@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  let top = 0;
-  let left = 0;
+  let offsetY = 0;
+  let offsetX = 0;
   let display = 'block';
   let isMouseDown = false;
 
@@ -38,8 +38,8 @@
 
     const offset = cursors[cursorStyle].offset || [0, 0];
 
-    top = event.clientY + offset[1];
-    left = event.clientX + offset[0];
+    offsetY = event.clientY + offset[1];
+    offsetX = event.clientX + offset[0];
   };
 
   const hideMouse = () => (display = 'none');
@@ -57,8 +57,7 @@
   draggable="false"
   class="mouse"
   {src}
-  style:top={top + 'px'}
-  style:left={left + 'px'}
+  style:transform={`translate3d(${offsetX}px, ${offsetY}px, 0px)`}
   bind:this={mouseElement}
   style:display
   alt="mouse"
@@ -67,6 +66,7 @@
 <style>
   .mouse {
     /* transform: translateZ(0); */
+    backface-visibility: hidden;
     position: absolute;
     z-index: 1000;
     width: 27px;

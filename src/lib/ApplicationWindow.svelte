@@ -28,26 +28,36 @@
     updateDimensionsPixels();
   });
 
-  let isMouseDownResize = false;
-  let isMouseDownMove = false;
-  let resizeAxis: string;
-
-  const mouseUp = () => {
-    isMouseDownMove = false;
-    isMouseDownResize = false;
+  let isMouseDown = {
+    resize: false,
+    move: false,
   };
 
-  const mouseDownMove = () => (isMouseDownMove = true);
+  let resizeAxis: string;
+  let animationFrameID: number;
+
+  const mouseDownMove = () => (isMouseDown.move = true);
   const mouseDownResize = (axis: string) => {
-    isMouseDownResize = true;
+    isMouseDown.resize = true;
     resizeAxis = axis;
+  };
+  const mouseUp = () => {
+    isMouseDown.resize = false;
+    isMouseDown.move = false;
+
+    cancelAnimationFrame(animationFrameID);
   };
 
   const updateWindow = (event: MouseEvent) => {
-    if (isMouseDownMove) {
-      offsetY += event.movementY;
-      offsetX += event.movementX;
-    } else if (isMouseDownResize) {
+    event.stopPropagation();
+    if (animationFrameID) cancelAnimationFrame(animationFrameID);
+    if (isMouseDown.move) {
+      const moveWindow = () => {
+        offsetX += event.movementX;
+        offsetY += event.movementY;
+      };
+      animationFrameID = requestAnimationFrame(moveWindow);
+    } else if (isMouseDown.resize) {
       const setWidthNeg = () => {
         const newWidth = widthPixels - event.movementX;
         if (newWidth >= parseInt(minWidth)) {
@@ -100,17 +110,15 @@
     }
   };
 
-  const closeWindow = () => {
-    windowElement.remove();
-  };
-
+  const minimizeWindow = () => {};
   const maximizeWindow = () => {};
+  const closeWindow = () => windowElement.remove();
 </script>
 
 <svelte:window
   on:mouseup={mouseUp}
-  on:mousemove={updateWindow}
   on:mouseleave={mouseUp}
+  on:mousemove={updateWindow}
 />
 <div
   class="application-window"
@@ -118,7 +126,7 @@
   style:height
   style:min-width={minWidth}
   style:min-height={minHeight}
-  style:translate={`${offsetX}px ${offsetY}px`}
+  style:transform={`translate3d(${offsetX}px, ${offsetY}px, 0px)`}
   bind:this={windowElement}
 >
   {#if isResizable}
@@ -183,7 +191,7 @@
     </div>
     <p class="title">{title}</p>
     <div class="actions">
-      <button class="minimize"></button>
+      <button class="minimize" on:click={minimizeWindow}></button>
       <button class="maximize" on:click={maximizeWindow}></button>
       <button class="close" on:click={closeWindow}></button>
     </div>
@@ -217,8 +225,7 @@
     overflow: hidden;
     box-shadow: 0px 0px 8px #000000;
     backface-visibility: hidden;
-    transform: translateZ(0); // activates hardware acceleration :)
-    position: absolute;
+    position: fixed;
   }
 
   .application-window > .resizable-border {

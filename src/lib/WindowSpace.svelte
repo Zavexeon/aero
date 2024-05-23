@@ -27,7 +27,7 @@
   <slot />
 </div>
 
-<style>
+<style lang="scss">
   .window-space {
     width: 100%;
     height: 100%;

@@ -9,8 +9,18 @@
 <WindowSpace>
   <ApplicationWindow
     title="ScratchPad"
-    minHeight="100%"
-    minWidth="100%"
+    minHeight="200px"
+    minWidth="300px"
+    startingCoordinates={{ x: 0, y: 0 }}
+    icon="/icons/apps/ScratchPad.svg"
+  >
+    <WindowToolbar slot="toolbar"></WindowToolbar>
+    <textarea slot="workspace"></textarea>
+  </ApplicationWindow>
+  <ApplicationWindow
+    title="ScratchPad"
+    minHeight="200px"
+    minWidth="300px"
     startingCoordinates={{ x: 0, y: 0 }}
     icon="/icons/apps/ScratchPad.svg"
   >
