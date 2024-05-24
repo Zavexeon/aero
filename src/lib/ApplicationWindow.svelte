@@ -13,6 +13,7 @@
 
   let offsetY = startingCoordinates.y;
   let offsetX = startingCoordinates.x;
+  // let windowSpaceDimensionPixels;
 
   let windowElement: HTMLElement;
 
@@ -49,7 +50,6 @@
   };
 
   const updateWindow = (event: MouseEvent) => {
-    event.stopPropagation();
     if (animationFrameID) cancelAnimationFrame(animationFrameID);
     if (isMouseDown.move) {
       const moveWindow = () => {
@@ -213,12 +213,13 @@
   $window-border-radius: 10px 10px 2px 2px;
 
   $action-colors: (
-    minimize: #ff7c25,
+    minimize: #ffd025,
     maximize: #5bbcfc,
     close: #ff4f4f,
   );
 
   .application-window {
+    will-change: transform;
     display: flex;
     flex-direction: column;
     border-radius: $window-border-radius;
@@ -236,7 +237,7 @@
     grid-template-rows: 10px auto 10px;
     position: absolute;
     pointer-events: none;
-    z-index: 999; // make sure this is always on top :)
+    z-index: 1; // make sure this is always on top :)
 
     & > *:not(.center) {
       pointer-events: all;
@@ -326,9 +327,9 @@
   }
 
   .application-window > .workspace-border {
-    $border-thickness: 12px;
+    $border-thickness: 8px;
     background: linear-gradient(#ffffff5b, #afaeae5b, #3a3a3a5b);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(2px);
     flex-grow: 1;
     padding: 0px $border-thickness $border-thickness $border-thickness;
     display: flex;

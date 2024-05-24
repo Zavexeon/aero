@@ -1,9 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  let element: Element;
+  let element: HTMLElement;
+
+  const windowSpaceDimensionsPixels = {
+    height: 0,
+    width: 0,
+  };
+
+  const onWindowResize = () => {
+    windowSpaceDimensionsPixels.height = element.offsetHeight;
+    windowSpaceDimensionsPixels.width = element.offsetWidth;
+  };
 
   onMount(() => {
+    windowSpaceDimensionsPixels.height = element.offsetHeight;
+    windowSpaceDimensionsPixels.width = element.offsetWidth;
+
     const windows = [...element.children] as HTMLElement[];
 
     const focusWindow = (windowToFocus: HTMLElement) => {
@@ -23,8 +36,8 @@
   });
 </script>
 
-<div class="window-space" bind:this={element}>
-  <slot />
+<div class="window-space" on:resize={onWindowResize} bind:this={element}>
+  <slot {windowSpaceDimensionsPixels} />
 </div>
 
 <style lang="scss">

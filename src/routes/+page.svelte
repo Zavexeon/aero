@@ -30,6 +30,10 @@
 </WindowSpace>
 
 <style>
+  textarea {
+    resize: none;
+  }
+
   textarea:focus {
     outline: none;
   }
