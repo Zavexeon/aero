@@ -36,6 +36,10 @@
   let offsetX = 0;
   let offsetY = 0;
   let isMouseDown = false;
+  let display = 'block';
+
+  const hideMouse = () => (display = 'none');
+  const showMouse = () => (display = 'block');
 
   const updateMouse = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
@@ -60,10 +64,13 @@
   on:mousedown={(_) => (isMouseDown = true)}
   on:mouseup={(_) => (isMouseDown = false)}
 />
+
 <!--svelte-ignore avoid-mouse-events-on-document-->
+<svelte:document on:mouseleave={hideMouse} on:mouseenter={showMouse} />
 <div
   class="mouse"
   style:transform={`translate3d(${offsetX}px, ${offsetY}px, 0px)`}
+  style:display
 >
   {#each Object.entries(cursors) as [key, cursor]}
     <enhanced:img

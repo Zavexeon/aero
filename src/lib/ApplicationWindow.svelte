@@ -184,12 +184,12 @@
   {/if}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div class="title-bar" on:mousedown={mouseDownMove} data-cursor-style="move">
-    <div class="icon-container">
+    <div class="icon-container" data-cursor-style="move">
       {#if icon}
         <img class="icon" src={icon} alt="window icon" />
       {/if}
     </div>
-    <p class="title">{title}</p>
+    <p class="title" data-cursor-style="move">{title}</p>
     <div class="actions">
       <button class="minimize" on:click={minimizeWindow}></button>
       <button class="maximize" on:click={maximizeWindow}></button>
